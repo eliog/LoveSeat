@@ -443,6 +443,15 @@ namespace LoveSeat
             CouchResponse resp = req.GetCouchResponse();
             return new ViewResult(resp, req.GetRequest());
         }
+
+        public ViewResult<T> TemporaryView<T>(CouchView view, ViewOptions options)
+        {
+            var uri = String.Format("{0}/_temp_view", databaseBaseUri);
+            var serialized = ObjectSerializer.Serialize(view);
+            CouchRequest req = GetRequest(options, uri).Post().Json().Data(serialized);
+            CouchResponse resp = req.GetCouchResponse();
+            return new ViewResult<T>(resp, req.GetRequest(), ObjectSerializer, false);
+        }
         
         private ViewResult ProcessResults(string uri, ViewOptions options)
         {

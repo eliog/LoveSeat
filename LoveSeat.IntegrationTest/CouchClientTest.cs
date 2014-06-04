@@ -110,15 +110,30 @@ namespace LoveSeat.IntegrationTest
         public void Should_Run_Temporary_View()
         {
             var db = client.GetDatabase(baseDatabase);
-            db.CreateDocument(@"{""_id"":""1"", ""t"":""111""}");
-            db.CreateDocument(@"{""_id"":""2"", ""t"":""222""}");
-            db.CreateDocument(@"{""_id"":""3"", ""t"":""333""}");
+            db.CreateDocument(@"{""_id"":""1"", ""t"":""111"", ""z"":""aaa""}");
+            db.CreateDocument(@"{""_id"":""2"", ""t"":""222"", ""z"":""aaa""}");
+            db.CreateDocument(@"{""_id"":""3"", ""t"":""333"", ""z"":""aaa""}");
             var view = new CouchView();
             view.Map = "function(doc) {\nif (doc.t == \"222\") {\n  emit(doc._id,  {t: doc.t, gid:doc._id\n});\n}\n}";
             var results = db.TemporaryView(view, new ViewOptions());
             Assert.AreEqual(1, results.Keys.Count());
         }
 
+        [Test]
+        public void Should_Handle_Serialized_Temporary_View()
+        {
+            var db = client.GetDatabase(baseDatabase);
+            db.CreateDocument(@"{""_id"":""1"", ""t"":""111"", ""z"":""aaa""}");
+            db.CreateDocument(@"{""_id"":""2"", ""t"":""222"", ""z"":""aaa""}");
+            db.CreateDocument(@"{""_id"":""3"", ""t"":""333"", ""z"":""aaa""}");
+            var view = new CouchView();
+            view.Map = "function(doc) {\nif (doc.t == \"222\") {\n  emit(doc._id,  {id: doc.t, gid:\"test-123\"\n});\n}\n}";
+            var results = db.TemporaryView<TestViewResult>(view, new ViewOptions());
+            Assert.AreEqual(1, results.Keys.Count());
+            var r = results.Items.First();
+            Assert.AreEqual("222", r.Id);
+            Assert.AreEqual("test-123", r.Gid);
+        }
 
 		[Test]
 		public void Should_Determine_If_Doc_Has_Attachment()
@@ -278,5 +293,11 @@ namespace LoveSeat.IntegrationTest
         public string Id { get; set; }
         public string Rev { get; set; }
         public string Type { get { return "company"; } }
+    }
+
+    public class TestViewResult
+    {
+        public string Id { get; set; }
+        public string Gid { get; set; }
     }
 }
