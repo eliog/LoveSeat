@@ -80,7 +80,7 @@ namespace LoveSeat.Support
             }
             else if (AuthenticationType.Basic == this.authType) //Basic Authentication
             {
-                request = new CouchRequest(uri, username, password);
+                request = new CouchRequest(uri, username, password, etag);
             }
             else //default Cookie
             {

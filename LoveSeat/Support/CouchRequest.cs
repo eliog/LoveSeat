@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -50,7 +51,7 @@ namespace LoveSeat.Support
         /// <param name="uri"></param>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        public CouchRequest(string uri, string username, string password)
+        public CouchRequest(string uri, string username, string password,string eTag)
         {
 
             request = (HttpWebRequest)WebRequest.Create(uri);
@@ -69,7 +70,10 @@ namespace LoveSeat.Support
 
                 request.Headers.Add("Authorization", authValue);
             }
-
+            if (!String.IsNullOrEmpty(eTag))
+            {
+                request.Headers.Add("If-None-Match", eTag);
+            }
             request.Headers.Add("Accept-Charset", "utf-8");
             request.Headers.Add("Accept-Language", "en-us");
             request.ContentType = "application/json";
