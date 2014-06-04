@@ -434,6 +434,16 @@ namespace LoveSeat
             ThrowDesignDocException();
             return View(viewName, options, this.defaultDesignDoc);
         }
+
+        public ViewResult TemporaryView(CouchView view, ViewOptions options)
+        {
+            var uri = String.Format("{0}/_temp_view", databaseBaseUri);
+            var serialized = ObjectSerializer.Serialize(view);
+            CouchRequest req = GetRequest(options, uri).Post().Json().Data(serialized);
+            CouchResponse resp = req.GetCouchResponse();
+            return new ViewResult(resp, req.GetRequest());
+        }
+        
         private ViewResult ProcessResults(string uri, ViewOptions options)
         {
             CouchRequest req = GetRequest(options, uri);

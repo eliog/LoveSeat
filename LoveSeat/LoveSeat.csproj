@@ -68,6 +68,7 @@
     <Compile Include="CouchConfiguration.cs" />
     <Compile Include="CouchException.cs" />
     <Compile Include="CouchResponseObject.cs" />
+    <Compile Include="CouchView.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="CouchUser.cs" />
     <Compile Include="Interfaces\IDocumentDatabase.cs" />
