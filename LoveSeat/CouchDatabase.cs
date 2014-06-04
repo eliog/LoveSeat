@@ -273,7 +273,22 @@ namespace LoveSeat
             var resp = GetRequest(string.Format("{0}/{1}?rev={2}", databaseBaseUri, document.Id, document.Rev)).Put().Form().Data(document).GetCouchResponse();
             return resp.GetJObject();
         }
+        public CouchResponseObject SaveDocument(string id, string jsonForDocument)
+        {
+            var json = JObject.Parse(jsonForDocument); //to make sure it's valid json
+            var jobj =
+                GetRequest(databaseBaseUri + "/").Post().Json().Data(jsonForDocument).GetCouchResponse().GetJObject();
+            var resp = GetRequest(string.Format("{0}/{1}", databaseBaseUri, id)).Put().Form().Data(json).GetCouchResponse();
+            return jobj;
+        }
 
+        public CouchResponseObject SaveDocument(IBaseObject doc)
+        {
+            var serialized = ObjectSerializer.Serialize(doc);
+           
+           return SaveDocument(doc.Id, serialized);
+            
+        }
         /// <summary>
         /// Gets the results of a view with no view parameters.  Use the overload to pass parameters
         /// </summary>

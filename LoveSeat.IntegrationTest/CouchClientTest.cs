@@ -213,7 +213,25 @@ namespace LoveSeat.IntegrationTest
             company.Name = "Whiteboard-IT";
             db.CreateDocument(company);
             var doc = db.GetDocument<Company>("1234");
+
             Assert.AreEqual(company.Name, doc.Name);
+
+        }
+
+        [Test]
+        public void Should_Update_Existing_Property()
+        {
+            var db = client.GetDatabase(baseDatabase);
+            var company = new Company();
+            company.Id = "1234";
+            company.Name = "Whiteboard-IT";
+            db.CreateDocument(company);
+            var doc = db.GetDocument<Company>("1234");
+            doc.Name = "change it";
+            db.SaveDocument(doc);
+            var docc = db.GetDocument<Company>("1234");
+
+            Assert.AreEqual("change it", docc.Name);
         }
         [Test]
         public void JsonConvert_Should_Serialize_Properly()
@@ -287,7 +305,7 @@ namespace LoveSeat.IntegrationTest
             Assert.AreEqual("foo", db.View<Company>(viewName, options, designDoc).Items.ToList()[0].Name);
         }
 	}
-    public class Company : IBaseObject
+    public class Company : CouchDocument
     {        
         public string Name { get; set; }
         public string Id { get; set; }

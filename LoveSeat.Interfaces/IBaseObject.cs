@@ -9,6 +9,6 @@ namespace LoveSeat.Interfaces
         string Id { get; set; }
         [JsonProperty("_rev")]
         string Rev { get; set; }
-        string Type { get; }
+         
     }
 }
