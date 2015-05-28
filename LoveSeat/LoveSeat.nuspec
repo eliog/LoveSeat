@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Opilio.LoveSeat</id>
+        <version>1.0.0</version>
+        <title>Opilio.LoveSeat</title>
+        <authors>elio</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>My package description.</description>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Newtonsoft.Json" version="[6.0.0, ]" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="bin\Release\LoveSeat.dll" target="lib\net45\LoveSeat.dll" />
+        <file src="bin\Release\LoveSeat.Interfaces.dll" target="lib\net45\LoveSeat.Interfaces.dll" />
+    </files>
+</package>
